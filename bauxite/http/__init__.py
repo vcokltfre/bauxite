@@ -1,34 +1,27 @@
-from .constants import API_URL, VERSION
-from .error import BauxiteError
-from .http import (
+from .client import HTTPClient
+from .errors import (
     BadGateway,
     BadRequest,
-    BucketLock,
     Forbidden,
     GatewayTimeout,
-    HTTPClient,
     HTTPError,
-    LocalBucketLock,
-    LocalRateLimiter,
     MethodNotAllowed,
     NotFound,
-    RateLimiter,
-    Route,
     ServerError,
     ServiceUnavailable,
     TooManyRequests,
     Unauthorized,
     UnprocessableEntity,
-    File,
 )
+from .file import File
+from .ratelimiting import BucketLock, LocalBucketLock, LocalRateLimiter, RateLimiter
+from .route import Route
 
 __all__ = (
-    "API_URL",
-    "VERSION",
     "BadGateway",
     "BadRequest",
-    "BauxiteError",
     "BucketLock",
+    "File",
     "Forbidden",
     "GatewayTimeout",
     "HTTPClient",
@@ -44,5 +37,4 @@ __all__ = (
     "TooManyRequests",
     "Unauthorized",
     "UnprocessableEntity",
-    "File",
 )
