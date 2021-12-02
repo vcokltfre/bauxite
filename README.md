@@ -1,6 +1,6 @@
 # Bauxite
 
-Bauxite is a robus, low-level connector for the Discord API.
+Bauxite is a robust, low-level connector for the Discord API.
 
 ## What is Bauxite for?
 
