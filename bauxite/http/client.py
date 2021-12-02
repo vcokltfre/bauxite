@@ -208,3 +208,7 @@ class HTTPClient:
             await sleep(1 + attempt * 2)
 
         raise Exception("Unreachable")
+
+    async def close(self) -> None:
+        if self.__session:
+            await self.__session.close()
