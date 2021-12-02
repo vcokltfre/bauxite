@@ -9,7 +9,9 @@ Bauxite is made for two main purposes:
 - Creating higher-level API wrappers and frameworks
 - Creating things that need high levels of control and low-level access to the Discord API
 
-## Basic HTTP Example
+## Examples
+
+### Basic HTTP Example
 
 ```py
 from asyncio import run
@@ -32,7 +34,7 @@ async def main() -> None:
 run(main())
 ```
 
-## Basic Gateway Example
+### Basic Gateway Example
 
 ```py
 from asyncio import run
