@@ -76,15 +76,15 @@ class HTTPClient:
         on_error: Optional[set[Callback]] = None,
         on_ratelimit: Optional[set[Callback]] = None,
     ) -> None:
-        self.token = token.strip()
-        self.api_url = api_url or API_URL
-        self.user_agent = (
+        self._token = token.strip()
+        self._api_url = api_url or API_URL
+        self._user_agent = (
             user_agent
             or f"DiscordBot (https://github.com/vcokltfre/bauxite, {VERSION})"
         )
-        self.proxy_url = proxy_url
-        self.proxy_auth = proxy_auth
-        self.ratelimiter = ratelimiter or LocalRateLimiter()
+        self._proxy_url = proxy_url
+        self._proxy_auth = proxy_auth
+        self._ratelimiter = ratelimiter or LocalRateLimiter()
 
         self.__session: Optional[ClientSession] = None
 
@@ -99,8 +99,8 @@ class HTTPClient:
 
         self.__session = ClientSession(
             headers={
-                "Authorization": f"Bot {self.token}",
-                "User-Agent": self.user_agent,
+                "Authorization": f"Bot {self._token}",
+                "User-Agent": self._user_agent,
             }
         )
 
@@ -130,12 +130,12 @@ class HTTPClient:
         elif ctx.json is not Unset:
             ctx.params["json"] = ctx.json
 
-        lock = await self.ratelimiter.acquire(ctx.route.bucket)
+        lock = await self._ratelimiter.acquire(ctx.route.bucket)
 
         async with lock:
             response = await self._session.request(
                 ctx.route.method,
-                self.api_url + ctx.route.path,
+                self._api_url + ctx.route.path,
                 headers=ctx.headers,
                 **ctx.params,
             )
@@ -168,7 +168,7 @@ class HTTPClient:
                 retry_after = json["retry_after"]
 
                 if is_global:
-                    await self.ratelimiter.lock_globally(retry_after)
+                    await self._ratelimiter.lock_globally(retry_after)
                 else:
                     await lock.release(retry_after)
             else:

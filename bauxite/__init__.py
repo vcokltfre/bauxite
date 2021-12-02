@@ -1,5 +1,17 @@
 from .constants import API_URL, VERSION
 from .error import BauxiteError
+from .gateway import (
+    EventDirection,
+    GatewayClient,
+    GatewayCloseCodes,
+    GatewayCriticalError,
+    GatewayOps,
+    GatewayRateLimiter,
+    GatewayReconnect,
+    LocalGatewayRateLimiter,
+    Shard,
+    ShardStatus,
+)
 from .http import (
     BadGateway,
     BadRequest,
@@ -45,4 +57,14 @@ __all__ = (
     "Unauthorized",
     "UnprocessableEntity",
     "File",
+    "EventDirection",
+    "GatewayClient",
+    "GatewayCloseCodes",
+    "GatewayCriticalError",
+    "GatewayOps",
+    "GatewayRateLimiter",
+    "GatewayReconnect",
+    "LocalGatewayRateLimiter",
+    "Shard",
+    "ShardStatus",
 )
