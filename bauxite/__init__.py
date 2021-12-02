@@ -16,6 +16,7 @@ from .http import (
     BadGateway,
     BadRequest,
     BucketLock,
+    File,
     Forbidden,
     GatewayTimeout,
     HTTPClient,
@@ -31,7 +32,6 @@ from .http import (
     TooManyRequests,
     Unauthorized,
     UnprocessableEntity,
-    File,
 )
 
 __all__ = (

@@ -4,7 +4,14 @@ from sys import platform
 from time import time
 from typing import Awaitable, Callable, Optional
 
-from aiohttp import ClientSession, ClientWebSocketResponse, WSMessage, WSMsgType, WSServerHandshakeError, WebSocketError
+from aiohttp import (
+    ClientSession,
+    ClientWebSocketResponse,
+    WebSocketError,
+    WSMessage,
+    WSMsgType,
+    WSServerHandshakeError,
+)
 
 from .enums import EventDirection, GatewayCloseCodes, GatewayOps, ShardStatus
 from .errors import GatewayCriticalError, GatewayReconnect
@@ -162,7 +169,9 @@ class Shard:
         op = data["op"]
 
         if op == GatewayOps.HELLO:
-            self._pacemaker = create_task(self._start_pacemaker(data["d"]["heartbeat_interval"]))
+            self._pacemaker = create_task(
+                self._start_pacemaker(data["d"]["heartbeat_interval"])
+            )
             await self._identify()
         elif op == GatewayOps.ACK:
             self._last_ack = time()
