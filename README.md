@@ -17,7 +17,6 @@ from asyncio import run
 from bauxite import HTTPClient, Route
 
 
-
 async def main() -> None:
     client = HTTPClient("your_bot_token")
 
@@ -29,6 +28,26 @@ async def main() -> None:
     )
 
     await client.close()
+
+run(main())
+```
+
+## Basic Gateway Example
+
+```py
+from asyncio import run
+
+from bauxite import GatewayClient, HTTPClient
+
+
+async def callback(shard, direction, data) -> None:
+    print(f"{shard} [{direction}]: {data['op'] or data['t']}")
+
+async def main() -> None:
+    client = HTTPClient("your_bot_token")
+    gateway = GatewayClient(client, 32767, callbacks=[callback])
+
+    await gateway.spawn_shards()
 
 run(main())
 ```
