@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from asyncio import Event, Lock, create_task, sleep
-from typing import Dict, Protocol
+from typing import Protocol
 
 
 class BucketLock(Protocol):
@@ -42,7 +44,7 @@ class LocalBucketLock:
 
 class LocalRateLimiter:
     def __init__(self) -> None:
-        self.buckets: Dict[str, BucketLock] = {}
+        self.buckets: dict[str, BucketLock] = {}
 
         self._global = Event()
         self._global.set()

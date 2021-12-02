@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asyncio import create_task, sleep
 from collections import defaultdict
 from dataclasses import dataclass
