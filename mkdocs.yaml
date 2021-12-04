@@ -1,0 +1,25 @@
+site_name: Bauxite Docs
+site_description: The documentation for the Bauxite Discord API wrapper.
+site_url: https://bauxite.vcokltfre.dev/
+repo_name: vcokltfre/bauxite
+repo_url: https://github.com/vcokltfre/bauxite
+
+theme:
+  name: material
+  logo: assets/bauxite.png
+  favicon: assets/bauxite.png
+
+  palette:
+    - scheme: dark
+      toggle:
+        icon: material/weather-night
+        name: Dark Mode
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+
+extra_css:
+  - styles/dark.css
