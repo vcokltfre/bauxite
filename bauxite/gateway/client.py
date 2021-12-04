@@ -44,6 +44,9 @@ class GatewayClient:
         )
         self._panic: Optional[int] = None
 
+    def _panic_cb(self, code: int) -> None:
+        self._panic = code
+
     async def spawn_shards(self) -> None:
         if self._shard_count and not self._shard_ids:
             self._shard_ids = list(range(self._shard_count))
@@ -61,6 +64,7 @@ class GatewayClient:
                     self._shard_count,
                     self._http._token,
                     self._intents,
+                    self._panic_cb,
                     self._dispatch,
                     self._shard_hooks,
                 )
@@ -71,6 +75,7 @@ class GatewayClient:
                     gateway["shards"],
                     self._http._token,
                     self._intents,
+                    self._panic_cb,
                     self._dispatch,
                     self._shard_hooks,
                 )
@@ -93,6 +98,8 @@ class GatewayClient:
             self._tasks[shard.id] = create_task(self._run_shard(shard))
 
         while True:
+            if self._panic is not None:
+                raise GatewayCriticalError(self._panic)
             await sleep(1)
 
     async def _run_shard(self, shard: Shard) -> None:
@@ -100,10 +107,7 @@ class GatewayClient:
             self._gateway
         ), f"Client gateway is not set while running shard {shard.id}."
 
-        try:
-            await shard.connect(self._http._session, self._gateway["url"])
-        except GatewayCriticalError:
-            self._panic = True
+        await shard.connect(self._http._session, self._gateway["url"])
 
     async def _dispatch(
         self, shard: Shard, direction: EventDirection, data: dict

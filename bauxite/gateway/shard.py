@@ -41,6 +41,7 @@ class Shard:
         shard_count: int,
         token: str,
         intents: int,
+        panic_callback: Callable[[int], None],
         callback: Callable[["Shard", EventDirection, dict], Awaitable[None]],
         status_hooks: list[ShardStatusHook],
         ratelimiter: Optional[GatewayRateLimiter] = None,
@@ -50,6 +51,7 @@ class Shard:
         self._count = shard_count
         self._token = token
         self._intents = intents
+        self._panic = panic_callback
         self._callback = callback
         self._hooks = status_hooks
         self._send_limiter = ratelimiter or LocalGatewayRateLimiter(120, 60)
@@ -81,7 +83,14 @@ class Shard:
             create_task(hook(self, status))
 
     async def _spawn_ws(self, session: ClientSession, url: str) -> None:
-        self._ws = await session.ws_connect(url)
+        args = {
+            "max_msg_size": 0,
+            "timeout": 60,
+            "autoclose": False,
+            "headers": {"User-Agent": "Bauxite"},
+        }
+
+        self._ws = await session.ws_connect(url, **args)
 
     async def _connect(self, session: ClientSession, url: str) -> None:
         self._status_hook(ShardStatus.CONNECTING)
@@ -186,6 +195,7 @@ class Shard:
         self._status_hook(ShardStatus.ERRORED)
 
         if code in CRITICAL:
+            self._panic(code)
             raise GatewayCriticalError(code)
 
         if code in NONCRITICAL:
